@@ -1,0 +1,32 @@
+version: '3.4'
+
+networks:
+  demoblazorapp:
+
+services:
+  demoappdb:
+    container_name: app-db3
+    image: pacteraedge12/blazorsql:latest
+    
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Yukon900
+    
+
+    networks:
+      - demoblazorapp
+  demoblazorserverapp:
+    
+    image: pacteraedge12/demoblazorserverapp:test
+    build:
+      context: .
+      dockerfile: DemoBlazorServerApp/Dockerfile
+    
+    depends_on:
+      - demoappdb
+    environment:
+      - DB_HOST=demoappdb
+      - DB_NAME=DemoBlazorApp
+      - DB_SA_PASSWORD=Yukon900
+    networks:
+      - demoblazorapp
